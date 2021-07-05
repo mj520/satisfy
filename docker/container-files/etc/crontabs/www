@@ -1,0 +1,1 @@
+* * * * * flock -nx /tmp/satisfy.cron.lock -c /data/www/bin/cron-rebuild.sh
