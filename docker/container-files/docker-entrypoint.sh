@@ -44,7 +44,7 @@ parameters:
     devops.secret: ${DEVOPS_SECRET}
 EOF
 
-if [[ ! -e ${SATIS_FILE} ]]; then
+if [[ ! -e ${SATIS_FILE} ]] || [[ `cat ${SATIS_FILE} |wc -l` -le 1 ]]; then
   cat > ${SATIS_FILE} <<EOF
 {
     "name": "${REPO_NAME}",
@@ -65,6 +65,9 @@ if [[ ! -e ${SATIS_FILE} ]]; then
 }
 EOF
 fi
+
+echo "$(sed 's#"name":\s*".*"#"name": "'$(echo $REPO_NAME)'"#g' ${SATIS_FILE})" > ${SATIS_FILE}
+echo "$(sed 's#"homepage":\s*".*"#"homepage": "'$(echo $HOMEPAGE)'"#g' ${SATIS_FILE})" > ${SATIS_FILE}
 
 if [[ "${SSH_PRIVATE_KEY}" != "" ]] ; then
     mkdir -p /data/www/.ssh 
